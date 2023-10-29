@@ -2,14 +2,14 @@
   margin: 20px 0;
 }
 
-.search-title{
-	text-align: center;
-	margin-bottom: 15px;
-	color: #333;
+.search-title {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
 }
 
 .search-form {
-display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 }

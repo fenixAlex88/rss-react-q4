@@ -41,7 +41,7 @@ class App extends Component<SearchProps, SearchState> {
   }
 
   handlePageChange(event: React.MouseEvent<HTMLButtonElement>): void {
-    const page: number = Number(event.currentTarget.dataset.page);
+    const page = Number(event.currentTarget.dataset.page);
     this.setState({ page }, this.fetchPeople);
   }
 
