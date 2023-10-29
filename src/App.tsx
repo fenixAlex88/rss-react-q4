@@ -11,6 +11,7 @@ interface SearchState {
   error: string;
   page: number;
   total: number;
+  loading: boolean;
 }
 
 interface SearchProps {}
@@ -25,6 +26,7 @@ class App extends Component<SearchProps, SearchState> {
       error: '',
       page: 1,
       total: 0,
+      loading: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,7 +37,7 @@ class App extends Component<SearchProps, SearchState> {
   handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const value: string = event.target.value;
     this.setState({
-      query: value.trim(),
+      query: value,
       page: 1,
     });
   }
@@ -52,9 +54,10 @@ class App extends Component<SearchProps, SearchState> {
 
   async fetchPeople(): Promise<void> {
     try {
+      this.setState({ loading: true });
       const response = await fetch(
         `https://swapi.dev/api/people/?${
-          this.state.query && `search=${this.state.query}&`
+          this.state.query && `search=${this.state.query.trim()}&`
         }page=${this.state.page}`
       );
       const { results, count }: { results: IPerson[]; count: number } =
@@ -71,10 +74,16 @@ class App extends Component<SearchProps, SearchState> {
         error: error instanceof Error ? error.message : 'Unexpected error',
         total: 0,
       });
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
-  componentDidUpdate() {
+  componentDidMount(): void {
+    this.fetchPeople();
+  }
+
+  componentDidUpdate(): void {
     if (this.state.page < 0) throw new Error('Test error');
   }
 
@@ -87,7 +96,11 @@ class App extends Component<SearchProps, SearchState> {
           handleSubmit={this.handleSubmit}
         />
         <hr />
-        <CardList results={this.state.results} error={this.state.error} />
+        {this.state.loading ? (
+          <div className="loader" />
+        ) : (
+          <CardList results={this.state.results} error={this.state.error} />
+        )}
         <Pagination
           currentPage={this.state.page}
           total={this.state.total}
