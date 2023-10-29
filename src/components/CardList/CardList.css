@@ -1,0 +1,20 @@
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 20px;
+}
+.error,
+.no-results {
+  font-size: 24px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.error {
+  color: #f00;
+}
+
+.no-results {
+  color: #999;
+}
