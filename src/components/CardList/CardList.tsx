@@ -9,7 +9,7 @@ interface CardListProps {
   error: string;
 }
 
-const CardList: React.FC<CardListProps> = ({error, results}) => {
+const CardList: React.FC<CardListProps> = ({ error, results }) => {
   if (error) {
     return <p className="error">{error}</p>;
   }

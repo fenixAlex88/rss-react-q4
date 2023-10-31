@@ -6,6 +6,7 @@ import Pagination from './components/Pagination/Pagination';
 import { IPerson } from './interfaces/IPerson';
 
 import './App.css';
+import { BASE_URL } from './config/api.config';
 
 const App: React.FC = () => {
   const [query, setQuery] = useState<string>(
@@ -22,9 +23,7 @@ const App: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `https://swapi.dev/api/people/?${
-            query && `search=${query.trim()}&`
-          }page=${page}`
+          `${BASE_URL}/?${query && `search=${query.trim()}&`}page=${page}`
         );
         const { results, count }: { results: IPerson[]; count: number } =
           await response.json();
