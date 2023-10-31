@@ -1,5 +1,3 @@
-import React from 'react';
-
 import './Pagination.css';
 
 interface PaginationProps {
@@ -8,32 +6,29 @@ interface PaginationProps {
   handlePageChange: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-class Pagination extends React.Component<PaginationProps> {
-  constructor(props: PaginationProps) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div className="pagination">
-        {Array.from(
-          { length: Math.ceil(this.props.total / 10) },
-          (_, i) => i + 1
-        ).map((page) => (
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  handlePageChange,
+  total,
+}) => {
+  return (
+    <div className="pagination">
+      {Array.from({ length: Math.ceil(total / 10) }, (_, i) => i + 1).map(
+        (page) => (
           <button
             className={`pagination-button ${
-              page === this.props.currentPage ? 'active' : ''
+              page === currentPage ? 'active' : ''
             }`}
             data-page={page}
-            onClick={this.props.handlePageChange}
+            onClick={handlePageChange}
             key={page}
           >
             {page}
           </button>
-        ))}
-      </div>
-    );
-  }
-}
+        )
+      )}
+    </div>
+  );
+};
 
 export default Pagination;
