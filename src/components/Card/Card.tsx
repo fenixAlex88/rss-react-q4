@@ -1,3 +1,4 @@
+import { IMAGE_URL } from '../../config/api.config';
 import { IPerson } from '../../interfaces/IPerson';
 
 import './Card.css';
@@ -18,6 +19,11 @@ const Card: React.FC<CardProps> = ({ person }) => {
   return (
     <div className="card">
       <h3 className="card-title">{person.name}</h3>
+      <img
+        className="card-img"
+        src={`${IMAGE_URL}/${person.url.match(/\d+/g)}.jpg`}
+        alt="person.name"
+      />
       <ul className="card-list">
         {cardTemplate.map((item) => (
           <li className="card-item" key={item.key}>
