@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 import './Search.css';
+import Button from '../UI/Button';
+import Input from '../UI/Input';
 
 interface SearchProps {
   handleSubmit: (
@@ -18,16 +20,16 @@ const Search: React.FC<SearchProps> = ({ handleSubmit }) => {
         className="search-form"
         onSubmit={(e) => handleSubmit(e, searchQuery)}
       >
-        <input
+        <Input
           type="text"
           className="search-input"
           placeholder="Search by people"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button type="submit" className="search-button">
+        <Button type="submit" className="search-button">
           Search
-        </button>
+        </Button>
       </form>
     </div>
   );
