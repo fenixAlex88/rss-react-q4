@@ -1,8 +1,6 @@
-import { IPerson } from '../../interfaces/IPerson';
+import { IPerson } from '../interfaces/IPerson';
 
-import Card from '../Card/Card';
-
-import './CardList.css';
+import Card from './Card';
 
 interface CardListProps {
   results: IPerson[];
@@ -11,15 +9,17 @@ interface CardListProps {
 
 const CardList: React.FC<CardListProps> = ({ error, results }) => {
   if (error) {
-    return <p className="error">{error}</p>;
+    return <p className="text-2xl text-center mt-5 text-red-600">{error}</p>;
   }
 
   if (results.length === 0) {
-    return <p className="no-results">No results</p>;
+    return (
+      <p className="text-2xl text-center mt-5 text-gray-600">No results</p>
+    );
   }
 
   return (
-    <div className="results">
+    <div className="flex flex-wrap justify-center m-5">
       {results.map((person) => (
         <Card person={person} key={person.url} />
       ))}

@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import './Search.css';
-import Button from '../UI/Button';
-import Input from '../UI/Input';
+import Button from './UI/Button';
+import Input from './UI/Input';
 
 interface SearchProps {
   handleSubmit: (
@@ -14,22 +13,21 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({ handleSubmit }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   return (
-    <div className="search">
-      <h1 className="search-title">Search by Star Wars characters</h1>
+    <div className="mx-0 my-5">
+      <h1 className="text-center text-gray-800 mb-4 font-bold text-3xl">
+        Search by Star Wars characters
+      </h1>
       <form
-        className="search-form"
+        className="flex items-center justify-center"
         onSubmit={(e) => handleSubmit(e, searchQuery)}
       >
         <Input
           type="text"
-          className="search-input"
           placeholder="Search by people"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <Button type="submit" className="search-button">
-          Search
-        </Button>
+        <Button type="submit">Search</Button>
       </form>
     </div>
   );

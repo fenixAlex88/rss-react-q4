@@ -1,9 +1,9 @@
 import { useLoaderData } from 'react-router-dom';
 
 import { useSetSearchParam } from '../hooks/useSetSearchParam';
-import Search from '../components/Search/Search';
-import CardList from '../components/CardList/CardList';
-import Pagination from '../components/Pagination/Pagination';
+import Search from '../components/Search';
+import CardList from '../components/CardList';
+import Pagination from '../components/Pagination';
 
 import { IPerson } from '../interfaces/IPerson';
 
@@ -33,7 +33,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <>
       <Search handleSubmit={handleSubmit} />
       <hr />
 
@@ -47,7 +47,7 @@ const Home: React.FC = () => {
       <button type="button" onClick={() => {}} className="error-button">
         Create an error
       </button>
-    </div>
+    </>
   );
 };
 

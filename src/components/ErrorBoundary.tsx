@@ -1,5 +1,4 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import './ErrorBoundary.css';
 
 interface ErrorBoundaryProps {
   children?: ReactNode;
@@ -25,9 +24,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="error-boundary">
-          <h1 className="error-boundary-title">Something went wrong</h1>
-          <p className="error-boundary-message">
+        <div className="flex flex-col items-center justify-center m-5">
+          <h1 className="text-red-600 text-4xl">Something went wrong</h1>
+          <p className="text-neutral-800 text-lg">
             An unexpected error occurred. Please try again later.
           </p>
         </div>
