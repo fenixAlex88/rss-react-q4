@@ -1,7 +1,6 @@
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, Outlet } from 'react-router-dom';
 
 import { useSetSearchParam } from '../hooks/useSetSearchParam';
-import Search from '../components/Search';
 import CardList from '../components/CardList';
 import Pagination from '../components/Pagination';
 
@@ -11,6 +10,7 @@ import { fetchPersons } from '../services/fetchData.service';
 
 import '../App.css';
 import React from 'react';
+import WithLoader from '../components/WithLoader';
 
 const Home: React.FC = () => {
   const { count, results, page } = useLoaderData() as {
@@ -24,26 +24,19 @@ const Home: React.FC = () => {
     if (page) setSearchParam('page', page.toString());
   };
 
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement>,
-    searchQuery: string
-  ): void => {
-    event.preventDefault();
-    if (searchQuery) setSearchParam('search', searchQuery);
-  };
-
   return (
     <>
-      <Search handleSubmit={handleSubmit} />
-      <hr />
-
-      <CardList results={results} />
-
-      <Pagination
-        currentPage={page}
-        total={count}
-        handlePageChange={handlePageChange}
-      />
+      <WithLoader>
+        <>
+          <CardList results={results} />
+          <Pagination
+            currentPage={page}
+            total={count}
+            handlePageChange={handlePageChange}
+          />
+        </>
+      </WithLoader>
+      <Outlet />
       <button type="button" onClick={() => {}} className="error-button">
         Create an error
       </button>

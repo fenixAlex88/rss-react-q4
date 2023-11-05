@@ -2,16 +2,20 @@ import { useState } from 'react';
 
 import Button from './UI/Button';
 import Input from './UI/Input';
+import { useSetSearchParam } from '../hooks/useSetSearchParam';
 
-interface SearchProps {
-  handleSubmit: (
+const Search: React.FC = () => {
+  const setSearchParams = useSetSearchParam();
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const handleSubmit = (
     event: React.FormEvent<HTMLFormElement>,
     searchQuery: string
-  ) => void;
-}
+  ): void => {
+    event.preventDefault();
+    if (searchQuery) setSearchParams('search', searchQuery);
+    setSearchParams('page', '1');
+  };
 
-const Search: React.FC<SearchProps> = ({ handleSubmit }) => {
-  const [searchQuery, setSearchQuery] = useState<string>('');
   return (
     <div className="mx-0 my-5">
       <h1 className="text-center text-gray-800 mb-4 font-bold text-3xl">
