@@ -37,7 +37,7 @@ const Home: React.FC = () => {
       <Search handleSubmit={handleSubmit} />
       <hr />
 
-      <CardList results={results} error={''} />
+      <CardList results={results} />
 
       <Pagination
         currentPage={page}
