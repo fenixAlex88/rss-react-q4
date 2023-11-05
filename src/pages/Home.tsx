@@ -1,79 +1,50 @@
-import { useState, useEffect } from 'react';
+import { useLoaderData } from 'react-router-dom';
 
+import { useSetSearchParam } from '../hooks/useSetSearchParam';
 import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
 import Pagination from '../components/Pagination/Pagination';
 
 import { IPerson } from '../interfaces/IPerson';
 
-import localStorageService from '../services/localStorage.service';
-import { fetchPeoples } from '../services/fetchData.service';
+import { fetchPersons } from '../services/fetchData.service';
 
 import '../App.css';
+import React from 'react';
 
 const Home: React.FC = () => {
-  const [query, setQuery] = useState<string>(
-    localStorageService.get('search') || ''
-  );
-  const [results, setResults] = useState<IPerson[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const [total, setTotal] = useState<number>(0);
+  const { count, results, page } = useLoaderData() as {
+    count: number;
+    results: IPerson[];
+    page: number;
+  };
+  const setSearchParam = useSetSearchParam();
 
-
-
-  useEffect(() => {
-    localStorageService.set('search', query as string);
-    fetchPeoples(query, page).then(({ count, results }) => {
-      setResults(results);
-      setTotal(count);
-    });
-  }, [query, page]);
-
-  useEffect(() => {
-    if (page < 0) throw new Error('Test error');
-  });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const value: string = event.target.value;
-    setQuery(value);
-    setPage(1);
+  const handlePageChange = (page: number): void => {
+    if (page) setSearchParam('page', page.toString());
   };
 
-  const handlePageChange = (
-    event: React.MouseEvent<HTMLButtonElement>
+  const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement>,
+    searchQuery: string
   ): void => {
-    const page = Number(event.currentTarget.dataset.page);
-    setPage(page);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    setPage(1);
+    if (searchQuery) setSearchParam('search', searchQuery);
   };
 
   return (
     <div className="container">
-      <Search
-        query={query}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-      />
+      <Search handleSubmit={handleSubmit} />
       <hr />
 
       <CardList results={results} error={''} />
 
       <Pagination
         currentPage={page}
-        total={total}
+        total={count}
         handlePageChange={handlePageChange}
       />
-      <button
-        type="button"
-        onClick={() => {
-          setPage(-1);
-        }}
-        className="error-button"
-      >
+      <button type="button" onClick={() => {}} className="error-button">
         Create an error
       </button>
     </div>
@@ -81,3 +52,20 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+export const personsLoader = async ({
+  request,
+}: {
+  request: { url: string };
+}): Promise<{
+  count: number;
+  results: IPerson[];
+  page: string;
+}> => {
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+  const name = searchParams.get('search') || '';
+  const page = searchParams.get('page') || '1';
+  const { count, results } = await fetchPersons(name, page);
+  return { count, results, page };
+};

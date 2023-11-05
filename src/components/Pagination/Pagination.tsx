@@ -3,7 +3,7 @@ import './Pagination.css';
 interface PaginationProps {
   currentPage: number;
   total: number;
-  handlePageChange: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handlePageChange: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -20,7 +20,7 @@ const Pagination: React.FC<PaginationProps> = ({
               page === currentPage ? 'active' : ''
             }`}
             data-page={page}
-            onClick={handlePageChange}
+            onClick={()=>handlePageChange(page)}
             key={page}
           >
             {page}
