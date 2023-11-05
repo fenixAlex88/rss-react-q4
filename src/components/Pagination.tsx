@@ -17,8 +17,7 @@ const Pagination: React.FC<PaginationProps> = ({
       {Array.from({ length: Math.ceil(total / 10) }, (_, i) => i + 1).map(
         (page) => (
           <Button
-            className={classNames({ 'bg-gray-500': page == currentPage })}
-            data-page={page}
+            className={classNames({ 'shadow-xl opacity-80': page == currentPage })}
             onClick={() => handlePageChange(page)}
             key={page}
           >

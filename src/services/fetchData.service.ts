@@ -8,12 +8,34 @@ export interface personsResponse {
   previous: string;
 }
 
-export interface response {
-  count: number;
-  results: [];
-  next: string;
-  previous: string;
+export interface personResponse {
+  name: string;
+  height: string;
+  mass: string;
+  hair_color: string;
+  skin_color: string;
+  eye_color: string;
+  birth_year: string;
+  gender: string;
+  homeworld: string;
+  films: string[];
+  species: [];
+  vehicles: string[];
+  starships: string[];
+  created: Date;
+  edited: Date;
+  url: string;
 }
+
+export const fetchPersonByID = async (id: string): Promise<personResponse> => {
+  const URL = `${BASE_URL}/${id}/`;
+  try {
+    const response = await fetchData(URL);
+    return response;
+  } catch (error) {
+    throw new Error(`Fetching data error: ${error}`);
+  }
+};
 
 export const fetchPersons = async (
   search: string,
@@ -21,17 +43,17 @@ export const fetchPersons = async (
 ): Promise<personsResponse> => {
   const URL = `${BASE_URL}/?search=${search.trim()}&page=${page}`;
   try {
-    const response = await fetchDataFromApi(URL);
+    const response = await fetchData(URL);
     return response;
   } catch (error) {
     throw new Error(`Fetching data error: ${error}`);
   }
 };
 
-const fetchDataFromApi = async (url: string): Promise<response> => {
+const fetchData = async (url: string) => {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error('Network response error');
+    throw new Error('Unknown network error');
   }
   return response.json();
 };

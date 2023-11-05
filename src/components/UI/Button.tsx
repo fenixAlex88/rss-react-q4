@@ -13,8 +13,8 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       className={classNames(
-        'h-10 bg-gray-800 text-white text-base ml-2.5 px-5',
-        className
+        className,
+        'h-10 bg-gray-800 text-white text-base ml-2.5 px-5'
       )}
       {...props}
     >

@@ -1,32 +1,64 @@
-import { useLoaderData, Outlet } from 'react-router-dom';
+import { useCallback, useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import { useSetSearchParam } from '../hooks/useSetSearchParam';
 import CardList from '../components/CardList';
 import Pagination from '../components/Pagination';
-
+import Search from '../components/Search';
+import Spinner from '../components/UI/Spinner';
+import { useSetSearchParam } from '../hooks/useSetSearchParam';
+import { fetchPersons } from '../services/fetchData.service';
+import localStorageService from '../services/localStorage.service';
 import { IPerson } from '../interfaces/IPerson';
 
-import { fetchPersons } from '../services/fetchData.service';
-
-import '../App.css';
-import React from 'react';
-import WithLoader from '../components/WithLoader';
-
 const Home: React.FC = () => {
-  const { count, results, page } = useLoaderData() as {
-    count: number;
-    results: IPerson[];
-    page: number;
-  };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [count, setCount] = useState<number>(0);
+  const [results, setResults] = useState<IPerson[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchParams] = useSearchParams();
   const setSearchParam = useSetSearchParam();
+  let page = Number(searchParams.get('page')) || 1;
 
   const handlePageChange = (page: number): void => {
     if (page) setSearchParam('page', page.toString());
   };
 
+  const handleSearchSubmit = (
+    event: React.FormEvent<HTMLFormElement>
+  ): void => {
+    event.preventDefault();
+    page = 1;
+    setSearchParam('page', '1');
+    if (searchValue) setSearchParam('search', searchValue);
+    fetchData();
+  };
+
+  const fetchData = useCallback(() => {
+    setIsLoading(true);
+    localStorageService.set('search', searchValue);
+    fetchPersons(searchValue, page.toString())
+      .then(({ count, results }) => {
+        setCount(count);
+        setResults(results);
+      })
+      .finally(() => setIsLoading(false));
+  }, [page, searchValue]);
+
+  useEffect(() => {
+    fetchData();
+  }, [page]);
+
   return (
-    <>
-      <WithLoader>
+    <div>
+      <Search
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        handleSubmit={handleSearchSubmit}
+      />
+      <hr />
+      {isLoading ? (
+        <Spinner />
+      ) : (
         <>
           <CardList results={results} />
           <Pagination
@@ -35,30 +67,9 @@ const Home: React.FC = () => {
             handlePageChange={handlePageChange}
           />
         </>
-      </WithLoader>
-      <Outlet />
-      <button type="button" onClick={() => {}} className="error-button">
-        Create an error
-      </button>
-    </>
+      )}
+    </div>
   );
 };
 
 export default Home;
-
-export const personsLoader = async ({
-  request,
-}: {
-  request: { url: string };
-}): Promise<{
-  count: number;
-  results: IPerson[];
-  page: string;
-}> => {
-  const url = new URL(request.url);
-  const searchParams = url.searchParams;
-  const name = searchParams.get('search') || '';
-  const page = searchParams.get('page') || '1';
-  const { count, results } = await fetchPersons(name, page);
-  return { count, results, page };
-};
