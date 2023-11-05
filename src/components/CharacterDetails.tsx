@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import {
   useLoaderData,
   useNavigate,
@@ -8,8 +8,6 @@ import {
 import Button from './UI/Button';
 import Spinner from './UI/Spinner';
 import { ICharacterDetails } from '../interfaces/ICharacterDetails';
-
-
 
 const CharacterDetails: React.FC = () => {
   const details = useLoaderData() as ICharacterDetails;
@@ -27,27 +25,25 @@ const CharacterDetails: React.FC = () => {
   ];
 
   const detailsRef = useRef<null | HTMLElement>(null);
-  function handleClickOutside(event: MouseEvent) {
-    console.log(event.target);
 
-    if (
-      detailsRef.current &&
-      !detailsRef.current.contains(event.target as Node)
-    ) {
-      handleCloseSideMenu();
-    }
-  }
-
-  const handleCloseSideMenu = () => {
+  const handleCloseSideMenu = useCallback(() => {
     navigate(`/${search}`);
-  };
+  }, [navigate, search]);
 
   useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        detailsRef.current &&
+        !detailsRef.current.contains(event.target as Node)
+      ) {
+        handleCloseSideMenu();
+      }
+    }
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [handleCloseSideMenu]);
   return (
     <article
       className="flex flex-col border shadow-2xl bg-neutral-200 p-5 mt-8 rounded-2xl border-solid border-gray-300 self-start"

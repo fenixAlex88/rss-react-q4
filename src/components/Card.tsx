@@ -9,7 +9,6 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ person }) => {
   const { search } = useLocation();
   const id = person.url.match(/\d+/g);
- 
 
   return (
     <Link

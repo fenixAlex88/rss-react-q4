@@ -14,7 +14,9 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
   const [results, setResults] = useState<IPerson[]>([]);
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>(
+    localStorageService.get('search') || ''
+  );
   const [searchParams] = useSearchParams();
   const setSearchParam = useSetSearchParam();
   let page = Number(searchParams.get('page')) || 1;
@@ -46,6 +48,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   return (
