@@ -5,43 +5,28 @@ import CardList from '../components/CardList/CardList';
 import Pagination from '../components/Pagination/Pagination';
 
 import { IPerson } from '../interfaces/IPerson';
-import { BASE_URL } from '../config/api.config';
+
+import localStorageService from '../services/localStorage.service';
+import { fetchPeoples } from '../services/fetchData.service';
 
 import '../App.css';
 
 const Home: React.FC = () => {
   const [query, setQuery] = useState<string>(
-    localStorage.getItem('search') || ''
+    localStorageService.get('search') || ''
   );
   const [results, setResults] = useState<IPerson[]>([]);
-  const [error, setError] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+
 
   useEffect(() => {
-    const fetchPeople = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `${BASE_URL}/?${query && `search=${query.trim()}&`}page=${page}`
-        );
-        const { results, count }: { results: IPerson[]; count: number } =
-          await response.json();
-        setResults(results);
-        setError('');
-        setTotal(count);
-        localStorage.setItem('search', query as string);
-      } catch (error) {
-        setResults([]);
-        setError(error instanceof Error ? error.message : 'Unexpected error');
-        setTotal(0);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPeople();
+    localStorageService.set('search', query as string);
+    fetchPeoples(query, page).then(({ count, results }) => {
+      setResults(results);
+      setTotal(count);
+    });
   }, [query, page]);
 
   useEffect(() => {
@@ -74,11 +59,9 @@ const Home: React.FC = () => {
         handleSubmit={handleSubmit}
       />
       <hr />
-      {isLoading ? (
-        <div className="loader" />
-      ) : (
-        <CardList results={results} error={error} />
-      )}
+
+      <CardList results={results} error={''} />
+
       <Pagination
         currentPage={page}
         total={total}

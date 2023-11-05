@@ -1,14 +1,6 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom';
-import Home from './pages/Home';
+import { RouterProvider } from 'react-router-dom';
 
-const router = createBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<Home />} />)
-);
+import router from './router/router';
 
 const App: React.FC = () => {
   return <RouterProvider router={router} />;
