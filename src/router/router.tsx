@@ -8,6 +8,7 @@ import RootLayout from '../layouts/RootLayout';
 import ErrorComponent from '../components/ErrorComponent';
 import CharacterDetails from '../components/CharacterDetails';
 import { fetchPersonByID } from '../services/fetchData.service';
+import { ICharacterDetails } from '../interfaces/ICharacterDetails';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,7 +17,7 @@ const router = createBrowserRouter(
         path="/:id"
         element={<CharacterDetails />}
         loader={async ({ params }) => {
-          const data: CharacterDetails = await fetchPersonByID(
+          const data: ICharacterDetails = await fetchPersonByID(
             params.id as string
           );
           return data;
