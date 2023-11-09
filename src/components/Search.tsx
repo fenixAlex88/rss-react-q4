@@ -1,7 +1,6 @@
 import Button from './UI/Button';
 import Input from './UI/Input';
 import LimitSelect from './LimitSelect';
-import { useState } from 'react';
 
 interface SearchProps {
   searchValue: string;
