@@ -19,17 +19,22 @@ const Home: React.FC = () => {
   );
   const [searchParams] = useSearchParams();
   const setSearchParam = useSetSearchParam();
-  let page = Number(searchParams.get('page')) || 1;
+  const [page, setPage] = useState<number>(
+    Number(searchParams.get('page')) || 1
+  );
+  const [perPage, setPerPage] = useState<string>('10');
 
   const handlePageChange = (page: number): void => {
     if (page) setSearchParam('page', page.toString());
+    setPage(page);
   };
 
   const handleSearchSubmit = (
     event: React.FormEvent<HTMLFormElement>
   ): void => {
     event.preventDefault();
-    page = 1;
+    console.log(event);
+    setPage(1);
     setSearchParam('page', '1');
     if (searchValue) setSearchParam('search', searchValue);
     fetchData();
@@ -44,12 +49,11 @@ const Home: React.FC = () => {
         setResults(results);
       })
       .finally(() => setIsLoading(false));
-  }, [page, searchValue]);
+  }, [searchValue, page]);
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [searchValue, page, fetchData]);
 
   return (
     <div>
@@ -57,6 +61,8 @@ const Home: React.FC = () => {
         searchValue={searchValue}
         setSearchValue={setSearchValue}
         handleSubmit={handleSearchSubmit}
+        perPage={perPage}
+        setPerPage={setPerPage}
       />
       <hr />
       {isLoading ? (
