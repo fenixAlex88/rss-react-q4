@@ -11,7 +11,7 @@ const Select: React.FC<SelectProps> = ({
     <select
       className={classNames(
         className,
-        'm-3 px-4 h-10 bg-gray-50/50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 backdrop-blur-lg'
+        'm-3 px-4 h-10 bg-gray-700 border border-gray-300 text-gray-100 text-sm'
       )}
       {...props}
     ></select>

@@ -16,23 +16,26 @@ const Search: React.FC<SearchProps> = ({
   perPage,
   setPerPage,
 }) => {
-  const values = ['5', '10', '20'];
+  const values = ['5', '10'];
   return (
     <div className="mx-0 my-5">
       <h1 className="text-center text-gray-800 mb-4 font-bold text-3xl">
         Search by Star Wars characters
       </h1>
       <form
-        className="flex items-center justify-center"
+        className="max-w-2xl mx-auto flex items-center justify-between"
         onSubmit={handleSubmit}
       >
-        <Input
+        <div>
+          <Input
           type="text"
           placeholder="Search by people"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
         <Button type="submit">Search</Button>
+        </div>
+        
         <LimitSelect
           perPage={perPage}
           onSelect={(e) => setPerPage(e.target.value)}

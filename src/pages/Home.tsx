@@ -11,13 +11,13 @@ import localStorageService from '../services/localStorage.service';
 import { IPerson } from '../interfaces/IPerson';
 
 const Home: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
   const [results, setResults] = useState<IPerson[]>([]);
   const [searchValue, setSearchValue] = useState<string>(
     localStorageService.get('search') || ''
   );
-  const [searchParams] = useSearchParams();
   const setSearchParam = useSetSearchParam();
   const [page, setPage] = useState<number>(
     Number(searchParams.get('page')) || 1
@@ -33,17 +33,19 @@ const Home: React.FC = () => {
     event: React.FormEvent<HTMLFormElement>
   ): void => {
     event.preventDefault();
-    console.log(event);
     setPage(1);
     setSearchParam('page', '1');
-    if (searchValue) setSearchParam('search', searchValue);
+    setSearchParam('search', searchValue);
     fetchData();
   };
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
     localStorageService.set('search', searchValue);
-    fetchPersons(searchValue, page.toString())
+    fetchPersons(
+      searchValue,
+      perPage === '10' ? page.toString() : Math.ceil(page / 2).toString()
+    )
       .then(({ count, results }) => {
         setCount(count);
         setResults(results);
@@ -53,7 +55,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [searchValue, page, fetchData]);
+  }, [page]);
 
   return (
     <div>
@@ -69,10 +71,18 @@ const Home: React.FC = () => {
         <Spinner />
       ) : (
         <>
-          <CardList results={results} />
+          <CardList
+            results={
+              perPage === '10'
+                ? results
+                : page % 2
+                ? results.slice(0, 5)
+                : results.slice(5)
+            }
+          />
           <Pagination
             currentPage={page}
-            total={count}
+            total={perPage === '10' ? count: count*2}
             handlePageChange={handlePageChange}
           />
         </>
