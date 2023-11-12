@@ -51,11 +51,11 @@ const Home: React.FC = () => {
         setResults(results);
       })
       .finally(() => setIsLoading(false));
-  }, [searchValue, page]);
+  }, [searchValue, perPage, page]);
 
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, [fetchData, page]);
 
   return (
     <div>
