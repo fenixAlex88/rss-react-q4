@@ -16,11 +16,11 @@ const Home: React.FC = () => {
   const { setCount, setResults } = usePersonsDispatch();
   const [searchParams] = useSearchParams();
   const setSearchParam = useSetSearchParam();
-  const {searchValue, perPage} = useSearch();
+  const { searchValue, perPage } = useSearch();
   const [page, setPage] = useState<number>(
     Number(searchParams.get('page')) || 1
   );
-  
+
   const handlePageChange = (page: number): void => {
     if (page) setSearchParam('page', page.toString());
     setPage(page);
@@ -53,7 +53,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   return (

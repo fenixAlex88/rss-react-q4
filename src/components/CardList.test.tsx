@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import CardList from './CardList';
-import {
-  PersonsContext,
-  } from '../context/PersonsContext';
+import { PersonsContext } from '../context/PersonsContext';
 import { SearchContext } from '../context/SearchContext';
 import { render, screen } from '@testing-library/react';
 import { mockPersons } from './mockPersons';
@@ -12,24 +10,24 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 describe('CardList component', () => {
   it('renders the specified number of cards', () => {
     // Render the component with 10 cards per page and current page 1
-   const routes = [
-     {
-       path: '/',
-       element: (
-         <PersonsContext.Provider value={{ results: mockPersons, count: 10 }}>
-           <SearchContext.Provider value={{ searchValue: '', perPage: '10' }}>
-             <CardList currentPage={1} />
-           </SearchContext.Provider>
-         </PersonsContext.Provider>
-       ),
-     },
-   ];
-   const router = createMemoryRouter(routes, {
-     initialEntries: ['/'],
-   });
+    const routes = [
+      {
+        path: '/',
+        element: (
+          <PersonsContext.Provider value={{ results: mockPersons, count: 10 }}>
+            <SearchContext.Provider value={{ searchValue: '', perPage: '10' }}>
+              <CardList currentPage={1} />
+            </SearchContext.Provider>
+          </PersonsContext.Provider>
+        ),
+      },
+    ];
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/'],
+    });
 
     render(<RouterProvider router={router} />);
-   
+
     const cards: HTMLElement[] = screen.getAllByRole('link');
     expect(cards).toHaveLength(10);
 
@@ -61,7 +59,7 @@ describe('CardList component', () => {
       initialEntries: ['/'],
     });
 
-   render(<RouterProvider router={router} />);
+    render(<RouterProvider router={router} />);
 
     // Expect to find the message "No results" on the screen
     const message = screen.getByText('No results');

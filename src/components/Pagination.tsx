@@ -17,7 +17,7 @@ const Pagination: React.FC<PaginationProps> = ({
   return (
     <div className="flex justify-center m-5">
       {Array.from(
-        { length: Math.ceil((perPage == '10' ? total : (total * 2)) / 10) },
+        { length: Math.ceil((perPage == '10' ? total : total * 2) / 10) },
         (_, i) => i + 1
       ).map((page) => (
         <Button

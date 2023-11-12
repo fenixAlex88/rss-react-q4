@@ -17,9 +17,7 @@ describe('Error page', () => {
 
     const router = createMemoryRouter(routes);
 
-    render(
-        <RouterProvider router={router} />
-    );
+    render(<RouterProvider router={router} />);
 
     expect(
       await screen.getByText('Something went wrong...')

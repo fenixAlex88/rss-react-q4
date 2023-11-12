@@ -8,7 +8,7 @@ interface SearchProps {
 }
 const Search: React.FC<SearchProps> = ({ handleSubmit }) => {
   const { searchValue, perPage } = useSearch();
-  const {setSearchValue, setPerPage} = useSearchDispatch();
+  const { setSearchValue, setPerPage } = useSearchDispatch();
   const values = ['5', '10'];
   return (
     <div className="mx-0 my-5">
