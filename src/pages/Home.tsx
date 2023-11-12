@@ -8,22 +8,19 @@ import Spinner from '../components/UI/Spinner';
 import { useSetSearchParam } from '../hooks/useSetSearchParam';
 import { fetchPersons } from '../services/fetchData.service';
 import localStorageService from '../services/localStorage.service';
-import { IPerson } from '../interfaces/IPerson';
+import { usePersonsDispatch } from '../context/PersonsContext';
+import { useSearch } from '../context/SearchContext';
 
 const Home: React.FC = () => {
-  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [count, setCount] = useState<number>(0);
-  const [results, setResults] = useState<IPerson[]>([]);
-  const [searchValue, setSearchValue] = useState<string>(
-    localStorageService.get('search') || ''
-  );
+  const { setCount, setResults } = usePersonsDispatch();
+  const [searchParams] = useSearchParams();
   const setSearchParam = useSetSearchParam();
+  const {searchValue, perPage} = useSearch();
   const [page, setPage] = useState<number>(
     Number(searchParams.get('page')) || 1
   );
-  const [perPage, setPerPage] = useState<string>('10');
-
+  
   const handlePageChange = (page: number): void => {
     if (page) setSearchParam('page', page.toString());
     setPage(page);
@@ -33,6 +30,7 @@ const Home: React.FC = () => {
     event: React.FormEvent<HTMLFormElement>
   ): void => {
     event.preventDefault();
+    console.log(event);
     setPage(1);
     setSearchParam('page', '1');
     setSearchParam('search', searchValue);
@@ -51,40 +49,23 @@ const Home: React.FC = () => {
         setResults(results);
       })
       .finally(() => setIsLoading(false));
-  }, [searchValue, perPage, page]);
+  }, [searchValue, perPage, page, setCount, setResults]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, page]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   return (
     <div>
-      <Search
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        handleSubmit={handleSearchSubmit}
-        perPage={perPage}
-        setPerPage={setPerPage}
-      />
+      <Search handleSubmit={handleSearchSubmit} />
       <hr />
       {isLoading ? (
         <Spinner />
       ) : (
         <>
-          <CardList
-            results={
-              perPage === '10'
-                ? results
-                : page % 2
-                ? results.slice(0, 5)
-                : results.slice(5)
-            }
-          />
-          <Pagination
-            currentPage={page}
-            total={perPage === '10' ? count: count*2}
-            handlePageChange={handlePageChange}
-          />
+          <CardList currentPage={page} />
+          <Pagination currentPage={page} handlePageChange={handlePageChange} />
         </>
       )}
     </div>

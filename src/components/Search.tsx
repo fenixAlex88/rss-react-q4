@@ -1,21 +1,14 @@
 import Button from './UI/Button';
 import Input from './UI/Input';
 import LimitSelect from './LimitSelect';
+import { useSearch, useSearchDispatch } from '../context/SearchContext';
 
 interface SearchProps {
-  searchValue: string;
-  perPage: string;
-  setPerPage: (value: string) => void;
-  setSearchValue: (value: string) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
-const Search: React.FC<SearchProps> = ({
-  searchValue,
-  setSearchValue,
-  handleSubmit,
-  perPage,
-  setPerPage,
-}) => {
+const Search: React.FC<SearchProps> = ({ handleSubmit }) => {
+  const { searchValue, perPage } = useSearch();
+  const {setSearchValue, setPerPage} = useSearchDispatch();
   const values = ['5', '10'];
   return (
     <div className="mx-0 my-5">
@@ -28,14 +21,14 @@ const Search: React.FC<SearchProps> = ({
       >
         <div>
           <Input
-          type="text"
-          placeholder="Search by people"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-        <Button type="submit">Search</Button>
+            type="text"
+            placeholder="Search by people"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+          <Button type="submit">Search</Button>
         </div>
-        
+
         <LimitSelect
           perPage={perPage}
           onSelect={(e) => setPerPage(e.target.value)}

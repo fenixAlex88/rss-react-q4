@@ -12,7 +12,7 @@ const LimitSelect: React.FC<LimitSelectProps> = ({
   values,
 }) => {
   return (
-    <label>
+    <label className='ml-4'>
       Items per page
       <Select value={perPage} onChange={onSelect}>
         {values.map((value) => (
