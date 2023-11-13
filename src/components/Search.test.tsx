@@ -26,7 +26,7 @@ describe('Search Component', () => {
         path: '/',
         element: (
           <SearchProvider>
-            <PersonsProvider value={{}}>
+            <PersonsProvider>
               <Home />
             </PersonsProvider>
           </SearchProvider>
